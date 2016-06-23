@@ -1,14 +1,18 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TankServer {
 
 	public static final int TCP_PORT = 8876;
+	public static final int UDP_PORT = 6676;
 	private List<Client> clients = new ArrayList<Client>();
 	private int start_tank_id = 100;
 
@@ -18,6 +22,9 @@ public class TankServer {
 	}
 
 	public void start() {
+
+		new Thread(new UDPThread()).start();
+
 		Socket s = null;
 		try {
 			ServerSocket ss = new ServerSocket(TCP_PORT);
@@ -42,6 +49,7 @@ public class TankServer {
 				e.printStackTrace();
 			}
 		}
+
 	}
 
 	private class Client {
@@ -52,6 +60,36 @@ public class TankServer {
 			this.ip = ip;
 			this.port = port;
 		}
+	}
+
+	private class UDPThread implements Runnable {
+
+		byte[] buf = new byte[1024];
+
+		@Override
+		public void run() {
+
+			DatagramSocket ds = null;
+			try {
+				ds = new DatagramSocket(UDP_PORT);
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("UDP thread has started!.");
+			while (ds != null) {
+				DatagramPacket dp = new DatagramPacket(buf, buf.length);
+				try {
+					ds.receive(dp);
+					System.out.println("A udp client received!");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
 	}
 
 }

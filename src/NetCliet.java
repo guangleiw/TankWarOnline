@@ -43,10 +43,11 @@ public class NetCliet {
 		
 		TankNewMsg msg = new TankNewMsg(tc.myTank);
 		send(msg);
+		System.out.println("udp msg sent to host, at port:"+udp_port);
 	}
 	
 	private void send(TankNewMsg msg){
-		msg.send(ds, "127.0.0.1", udp_port);
+		msg.send(ds, "127.0.0.1", TankServer.UDP_PORT);
 	}
 	
 	private class UDPThread implements Runnable{
