@@ -12,6 +12,11 @@ public class TankServer {
 	private List<Client> clients = new ArrayList<Client>();
 	private int start_tank_id = 100;
 
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new TankServer().start();
+	}
+
 	public void start() {
 		Socket s = null;
 		try {
@@ -37,11 +42,6 @@ public class TankServer {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new TankServer().start();
 	}
 
 	private class Client {

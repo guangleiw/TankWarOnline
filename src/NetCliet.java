@@ -1,6 +1,7 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -10,6 +11,7 @@ public class NetCliet {
 	private int udp_port;
 	private TankClient tc;
 	Socket s = null;
+	private DatagramSocket ds = null;
 
 	public NetCliet(TankClient tc) {
 		udp_port = UDP_PORT_START++;
@@ -38,6 +40,23 @@ public class NetCliet {
 				e.printStackTrace();
 			}
 		}
+		
+		TankNewMsg msg = new TankNewMsg(tc.myTank);
+		send(msg);
 	}
+	
+	private void send(TankNewMsg msg){
+		msg.send(ds, "127.0.0.1", udp_port);
+	}
+	
+	private class UDPThread implements Runnable{
+
+		@Override
+		public void run() {
+			
+		}
+		
+	}
+	
 
 }
