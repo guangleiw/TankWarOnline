@@ -21,7 +21,7 @@ public class TankClient extends Frame {
 
 	Image offScreenImage = null;
 	
-	NetCliet nc = new NetCliet();
+	NetCliet nc = new NetCliet(this);
 	
 	@Override
 	public void paint(Graphics g) {
@@ -45,9 +45,7 @@ public class TankClient extends Frame {
 			t.draw(g);
 		}
 		
-		myTank.draw(g);
-		
-	
+		myTank.draw(g);	
 	}
 
 	@Override
