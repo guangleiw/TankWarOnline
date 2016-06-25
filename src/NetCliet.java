@@ -1,8 +1,11 @@
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class NetCliet {
@@ -15,7 +18,15 @@ public class NetCliet {
 
 	public NetCliet(TankClient tc) {
 		udp_port = UDP_PORT_START++;
-		this.tc =tc;
+		this.tc = tc;
+		
+		try {
+			ds = new DatagramSocket(this.udp_port);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void connect(String ip, int port) {
@@ -40,24 +51,46 @@ public class NetCliet {
 				e.printStackTrace();
 			}
 		}
-		
+
 		TankNewMsg msg = new TankNewMsg(tc.myTank);
 		send(msg);
-		System.out.println("udp msg sent to host, at port:"+udp_port);
+		new Thread(new UDPRecvThread()).start();
 	}
-	
-	private void send(TankNewMsg msg){
+
+	private void send(TankNewMsg msg) {
 		msg.send(ds, "127.0.0.1", TankServer.UDP_PORT);
 	}
-	
-	private class UDPThread implements Runnable{
+
+	private class UDPRecvThread implements Runnable {
+
+		byte[] buf = new byte[1024];
 
 		@Override
 		public void run() {
-			
+			while (ds != null) {
+				DatagramPacket dp = new DatagramPacket(buf, buf.length);
+				try {
+					ds.receive(dp);
+					System.out.println("A packet received from server !");
+					parse(dp);
+					
+					
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
-		
+
+		private void parse(DatagramPacket dp) {
+			// TODO Auto-generated method stub
+			ByteArrayInputStream bis = new ByteArrayInputStream(buf,0,dp.getLength());
+			DataInputStream dis = new DataInputStream(bis);
+			TankNewMsg msg = new TankNewMsg();
+			msg.parse(dis);
+		}
+
 	}
-	
 
 }
