@@ -8,13 +8,14 @@ import java.net.InetSocketAddress;
 
 public class TankNewMsg {
 	Tank tank;
+	TankClient tc = null;
 
 	public TankNewMsg(Tank tank) {
 		this.tank = tank;
 	}
 
-	public TankNewMsg() {
-		// TODO Auto-generated constructor stub
+	public TankNewMsg(TankClient tc) {
+		this.tc = tc;
 	}
 
 	public void send(DatagramSocket ds, String IP, int udpport) {
@@ -49,7 +50,14 @@ public class TankNewMsg {
 			int y = dis.readInt();
 			Dir dir = Dir.values()[dis.readInt()];
 			boolean good = dis.readBoolean();
-			System.out.println("id:" + id + "-x:" + "-y:" + y + "-dir:"+dir+"-good:" + good);
+			if(id == tc.myTank.id)
+				return;
+			else {
+				Tank t = new Tank(x, y, good, dir, tc);
+				t.id = id;
+				tc.tanks.add(t);
+			}
+			System.out.println("id:" + id + "-x:" + "-y:" + y + "-dir:" + dir + "-good:" + good);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

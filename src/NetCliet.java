@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 
 public class NetCliet {
 
-	private static int UDP_PORT_START = 2223;
+	private static int UDP_PORT_START = 2225;
 	private int udp_port;
 	private TankClient tc;
 	Socket s = null;
@@ -87,7 +87,7 @@ public class NetCliet {
 			// TODO Auto-generated method stub
 			ByteArrayInputStream bis = new ByteArrayInputStream(buf,0,dp.getLength());
 			DataInputStream dis = new DataInputStream(bis);
-			TankNewMsg msg = new TankNewMsg();
+			TankNewMsg msg = new TankNewMsg(tc);
 			msg.parse(dis);
 		}
 
