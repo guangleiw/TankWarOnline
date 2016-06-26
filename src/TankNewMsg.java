@@ -6,10 +6,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 
-public class TankNewMsg implements Msg{
-	
+public class TankNewMsg implements Msg {
+
 	int msgType = Msg.TANK_NEW_MSG;
-	
+
 	Tank tank;
 	TankClient tc = null;
 
@@ -56,28 +56,26 @@ public class TankNewMsg implements Msg{
 			boolean good = dis.readBoolean();
 			if (id == tc.myTank.id)
 				return;
-			else {
-//				boolean exists = false;
-//
-//				for (int i = 0; i < tc.tanks.size(); i++) {
-//					if (tc.tanks.get(i).id == id) {
-//						exists = true;
-//						t.x = x;
-//						t.y = y;
-//						break;
-//					}
-//				}
-//				if (!exists) {
-//					Tank t = new Tank(x, y, good, dir, tc);
-//					t.id = id;
-//					tc.tanks.add(t);
-//				}
-				Tank t = new Tank(x,y,good,dir,tc);
-				t.id = id ;
-				tc.tanks.add(t);
 
+			boolean exist = false;
+			for (int i = 0; i < tc.tanks.size(); i++) {
+				Tank t = tc.tanks.get(i);
+				if (id == t.id) {
+					exist = true;
+					break;
+				}
 			}
-			System.out.println("id:" + id + "-x:" + "-y:" + y + "-dir:" + dir + "-good:" + good);
+
+			if (!exist) {
+
+				TankNewMsg tnm = new TankNewMsg(tc.myTank);
+				tc.nc.send(tnm);
+
+				Tank t = new Tank(x, y, good, dir, tc);
+				t.id = id;
+				tc.tanks.add(t);
+				System.out.println("A new Tank added , id:" + id + "-x:" + "-y:" + y + "-dir:" + dir + "-good:" + good);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

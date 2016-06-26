@@ -65,10 +65,6 @@ public class TankMoveMsg implements Msg {
 					break;
 				}
 			}
-			if (!exist) {
-
-			}
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

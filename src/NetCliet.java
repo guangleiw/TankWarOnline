@@ -12,7 +12,7 @@ import sun.security.krb5.internal.NetClient;
 
 public class NetCliet {
 
-	private static int UDP_PORT_START = 2225;
+	private static int UDP_PORT_START = 2229;
 	private int udp_port;
 	private TankClient tc;
 	Socket s = null;
@@ -74,10 +74,7 @@ public class NetCliet {
 				try {
 					ds.receive(dp);
 					System.out.println("A packet received from server !");
-					parse(dp);
-					
-					
-					
+					parse(dp);					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -99,6 +96,7 @@ public class NetCliet {
 			Msg msg = null;
 			switch(msgType){
 			case Msg.TANK_NEW_MSG:
+
 				msg = new TankNewMsg(tc);
 				break;
 			case Msg.TANK_MOVE_MSG:
