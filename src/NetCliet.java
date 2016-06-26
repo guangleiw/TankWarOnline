@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import sun.security.krb5.internal.NetClient;
+
 public class NetCliet {
 
 	private static int UDP_PORT_START = 2225;
@@ -57,7 +59,7 @@ public class NetCliet {
 		new Thread(new UDPRecvThread()).start();
 	}
 
-	private void send(TankNewMsg msg) {
+	public  void send(Msg msg) {
 		msg.send(ds, "127.0.0.1", TankServer.UDP_PORT);
 	}
 
@@ -87,7 +89,22 @@ public class NetCliet {
 			// TODO Auto-generated method stub
 			ByteArrayInputStream bis = new ByteArrayInputStream(buf,0,dp.getLength());
 			DataInputStream dis = new DataInputStream(bis);
-			TankNewMsg msg = new TankNewMsg(tc);
+			int msgType= 0;
+			try {
+				msgType = dis.readInt();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Msg msg = null;
+			switch(msgType){
+			case Msg.TANK_NEW_MSG:
+				msg = new TankNewMsg(tc);
+				break;
+			case Msg.TANK_MOVE_MSG:
+				msg = new TankMoveMsg(tc);
+				break;
+			}
 			msg.parse(dis);
 		}
 

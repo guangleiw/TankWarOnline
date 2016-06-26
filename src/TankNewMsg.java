@@ -6,7 +6,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 
-public class TankNewMsg {
+public class TankNewMsg implements Msg{
+	
+	int msgType = Msg.TANK_NEW_MSG;
+	
 	Tank tank;
 	TankClient tc = null;
 
@@ -23,6 +26,7 @@ public class TankNewMsg {
 		DataOutputStream dos = new DataOutputStream(baos);
 
 		try {
+			dos.writeInt(msgType);
 			dos.writeInt(tank.id);
 			dos.writeInt(tank.x);
 			dos.writeInt(tank.y);
@@ -50,12 +54,28 @@ public class TankNewMsg {
 			int y = dis.readInt();
 			Dir dir = Dir.values()[dis.readInt()];
 			boolean good = dis.readBoolean();
-			if(id == tc.myTank.id)
+			if (id == tc.myTank.id)
 				return;
 			else {
-				Tank t = new Tank(x, y, good, dir, tc);
-				t.id = id;
+//				boolean exists = false;
+//
+//				for (int i = 0; i < tc.tanks.size(); i++) {
+//					if (tc.tanks.get(i).id == id) {
+//						exists = true;
+//						t.x = x;
+//						t.y = y;
+//						break;
+//					}
+//				}
+//				if (!exists) {
+//					Tank t = new Tank(x, y, good, dir, tc);
+//					t.id = id;
+//					tc.tanks.add(t);
+//				}
+				Tank t = new Tank(x,y,good,dir,tc);
+				t.id = id ;
 				tc.tanks.add(t);
+
 			}
 			System.out.println("id:" + id + "-x:" + "-y:" + y + "-dir:" + dir + "-good:" + good);
 		} catch (IOException e) {

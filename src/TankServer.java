@@ -51,7 +51,6 @@ public class TankServer {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	private class Client {
