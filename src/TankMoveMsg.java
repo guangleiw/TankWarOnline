@@ -56,6 +56,8 @@ public class TankMoveMsg implements Msg {
 		int id;
 		try {
 			id = dis.readInt();
+			x = dis.readInt();
+			y =  dis.readInt();
 			Dir dir = Dir.values()[dis.readInt()];
 			if (id == tc.myTank.id)
 				return;

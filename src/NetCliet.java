@@ -12,26 +12,34 @@ import sun.security.krb5.internal.NetClient;
 
 public class NetCliet {
 
-	private static int UDP_PORT_START = 2229;
 	private int udp_port;
+
+	public int getUdp_port() {
+		return udp_port;
+	}
+
+	public void setUdp_port(int udp_port) {
+		this.udp_port = udp_port;
+	}
+
 	private TankClient tc;
 	Socket s = null;
 	private DatagramSocket ds = null;
 
 	public NetCliet(TankClient tc) {
-		udp_port = UDP_PORT_START++;
 		this.tc = tc;
-		
+
+	}
+
+	public void connect(String ip, int port) {
+
 		try {
 			ds = new DatagramSocket(this.udp_port);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	}
 
-	public void connect(String ip, int port) {
 		try {
 			s = new Socket(ip, port);
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
@@ -59,7 +67,7 @@ public class NetCliet {
 		new Thread(new UDPRecvThread()).start();
 	}
 
-	public  void send(Msg msg) {
+	public void send(Msg msg) {
 		msg.send(ds, "127.0.0.1", TankServer.UDP_PORT);
 	}
 
@@ -74,7 +82,7 @@ public class NetCliet {
 				try {
 					ds.receive(dp);
 					System.out.println("A packet received from server !");
-					parse(dp);					
+					parse(dp);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -84,9 +92,9 @@ public class NetCliet {
 
 		private void parse(DatagramPacket dp) {
 			// TODO Auto-generated method stub
-			ByteArrayInputStream bis = new ByteArrayInputStream(buf,0,dp.getLength());
+			ByteArrayInputStream bis = new ByteArrayInputStream(buf, 0, dp.getLength());
 			DataInputStream dis = new DataInputStream(bis);
-			int msgType= 0;
+			int msgType = 0;
 			try {
 				msgType = dis.readInt();
 			} catch (IOException e) {
@@ -94,7 +102,7 @@ public class NetCliet {
 				e.printStackTrace();
 			}
 			Msg msg = null;
-			switch(msgType){
+			switch (msgType) {
 			case Msg.TANK_NEW_MSG:
 
 				msg = new TankNewMsg(tc);

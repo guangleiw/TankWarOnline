@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TankServer {
 
-	public static final int TCP_PORT = 8876;
+	public static final int TCP_PORT = 6677;
 	public static final int UDP_PORT = 6676;
 	private List<Client> clients = new ArrayList<Client>();
 	private int start_tank_id = 100;
