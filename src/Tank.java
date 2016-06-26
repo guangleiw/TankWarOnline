@@ -191,7 +191,7 @@ public class Tank {
 			dir = Dir.STOP;
 		
 		if(dir != oldDir){
-			TankMoveMsg msg = new TankMoveMsg(id,dir);
+			TankMoveMsg msg = new TankMoveMsg(id,x,y,dir);
 			tc.nc.send(msg);
 		}
 		

@@ -9,13 +9,15 @@ import java.net.InetSocketAddress;
 public class TankMoveMsg implements Msg {
 	int msgType = Msg.TANK_MOVE_MSG;
 	int id;
+	int x, y;
 	Dir dir;
 	TankClient tc = null;
 
-	public TankMoveMsg(int id, Dir dir) {
+	public TankMoveMsg(int id, int x, int y, Dir dir) {
 		this.id = id;
 		this.dir = dir;
-
+		this.x = x;
+		this.y = y;
 	}
 
 	public TankMoveMsg(TankClient tc) {
@@ -32,6 +34,8 @@ public class TankMoveMsg implements Msg {
 		try {
 			dos.writeInt(msgType);
 			dos.writeInt(id);
+			dos.writeInt(x);
+			dos.writeInt(y);
 			dos.writeInt(dir.ordinal());
 		} catch (Exception e) {
 			// TODO: handle exception
