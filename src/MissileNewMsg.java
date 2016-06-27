@@ -6,37 +6,32 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 
-public class TankMoveMsg implements Msg {
-	int msgType = Msg.TANK_MOVE_MSG;
-	int id;
-	int x, y;
-	Dir dir;
+public class MissileNewMsg implements Msg {
+	int msgType = Msg.TANK_MISSILE_MSG;
 	TankClient tc = null;
+	Missile m;
+	Tank t;
 
-	public TankMoveMsg(int id, int x, int y, Dir dir) {
-		this.id = id;
-		this.dir = dir;
-		this.x = x;
-		this.y = y;
+	public MissileNewMsg(Missile m) {
+		this.m = m;
 	}
 
-	public TankMoveMsg(TankClient tc) {
-		// TODO Auto-generated constructor stub
+	public MissileNewMsg(TankClient tc) {
 		this.tc = tc;
 	}
 
 	@Override
 	public void send(DatagramSocket ds, String IP, int port) {
-		// TODO Auto-generated method stub
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(baos);
 
 		try {
 			dos.writeInt(msgType);
-			dos.writeInt(id);
-			dos.writeInt(x);
-			dos.writeInt(y);
-			dos.writeInt(dir.ordinal());
+			dos.writeInt(m.tankId);
+			dos.writeInt(m.x);
+			dos.writeInt(m.y);
+			dos.writeInt(m.dir.ordinal());
+			dos.writeBoolean(m.good);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -48,33 +43,25 @@ public class TankMoveMsg implements Msg {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+
 	}
 
 	@Override
 	public void parse(DataInputStream dis) {
-		// TODO Auto-generated method stub
-		int id;
 		try {
-			id = dis.readInt();
-			x = dis.readInt();
-			y = dis.readInt();
-			Dir dir = Dir.values()[dis.readInt()];
-			if (id == tc.myTank.id)
+			int tankId = dis.readInt();
+			if (tankId == tc.myTank.id)
 				return;
-			boolean exist = false;
-			for (int i = 0; i < tc.tanks.size(); i++) {
-				Tank t = tc.tanks.get(i);
-				if (id == t.id) {
-					t.dir = dir;
-					exist = true;
-					break;
-				}
-			}
+			int x = dis.readInt();
+			int y = dis.readInt();
+			Dir dir = Dir.values()[dis.readInt()];
+			boolean good = dis.readBoolean();
+			Missile m = new Missile(tankId, x, y, good, dir, tc);
+			tc.missiles.add(m);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 }

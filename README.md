@@ -9,3 +9,10 @@ update:
 update:
 1. Allocate ID of tank in TankServer.java.
 2. Add ID bar for Tank in GUI.
+
+
+update:
+>.add Msg Interface
+>.add TankNewMsg 
+>.add TankMoveMsg
+>.add MissileNewMsg

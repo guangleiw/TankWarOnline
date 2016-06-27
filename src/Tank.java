@@ -222,8 +222,12 @@ public class Tank {
 	private Missile fire() {
 		int x = this.x + WIDTH / 2 - Missile.WIDTH / 2;
 		int y = this.y + HEIGHT / 2 - Missile.HEIGHT / 2;
-		Missile m = new Missile(x, y, this.good, this.ptDir, this.tc);
+		Missile m = new Missile(this.id,x, y, this.good, this.ptDir, this.tc);
 		tc.missiles.add(m);
+		
+		MissileNewMsg msg = new MissileNewMsg(m);
+		tc.nc.send(msg);
+		
 		return m;
 	}
 

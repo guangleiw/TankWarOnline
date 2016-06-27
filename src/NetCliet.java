@@ -104,11 +104,13 @@ public class NetCliet {
 			Msg msg = null;
 			switch (msgType) {
 			case Msg.TANK_NEW_MSG:
-
 				msg = new TankNewMsg(tc);
 				break;
 			case Msg.TANK_MOVE_MSG:
 				msg = new TankMoveMsg(tc);
+				break;
+			case Msg.TANK_MISSILE_MSG:
+				msg = new MissileNewMsg(tc);
 				break;
 			}
 			msg.parse(dis);
