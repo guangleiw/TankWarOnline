@@ -121,6 +121,9 @@ public class NetCliet {
 			case Msg.TANK_DEAD_MSG:
 				msg = new TankDeadMsg(tc);
 				break;
+			case Msg.MISSILE_DEAD_MSG:
+				msg = new MissileDeadMsg(tc);
+				break;
 			}
 			msg.parse(dis);
 		}

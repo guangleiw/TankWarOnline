@@ -6,17 +6,19 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 
-public class MissileNewMsg implements Msg {
-	int msgType = Msg.TANK_MISSILE_MSG;
-	TankClient tc = null;
-	Missile m;
-	Tank t;
+public class MissileDeadMsg implements Msg {
 
-	public MissileNewMsg(Missile m) {
-		this.m = m;
+	int id;
+	TankClient tc;
+	int tankId;
+	int msgType = Msg.MISSILE_DEAD_MSG;
+
+	public MissileDeadMsg(int tankID, int id) {
+		this.tankId = tankID;
+		this.id = id;
 	}
 
-	public MissileNewMsg(TankClient tc) {
+	public MissileDeadMsg(TankClient tc) {
 		this.tc = tc;
 	}
 
@@ -27,12 +29,8 @@ public class MissileNewMsg implements Msg {
 
 		try {
 			dos.writeInt(msgType);
-			dos.writeInt(m.tankId);
-			dos.writeInt(m.id);
-			dos.writeInt(m.x);
-			dos.writeInt(m.y);
-			dos.writeInt(m.dir.ordinal());
-			dos.writeBoolean(m.good);
+			dos.writeInt(tankId);
+			dos.writeInt(id);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -49,22 +47,24 @@ public class MissileNewMsg implements Msg {
 
 	@Override
 	public void parse(DataInputStream dis) {
+
 		try {
-			int tankId = dis.readInt();
-			if (tankId == tc.myTank.id)
-				return;
+			int tankID = dis.readInt();
+//			if (tankID == tc.myTank.id)
+//				return;
 			int id = dis.readInt();
-			int x = dis.readInt();
-			int y = dis.readInt();
-			Dir dir = Dir.values()[dis.readInt()];
-			boolean good = dis.readBoolean();
-			Missile m = new Missile(tankId, x, y, good, dir, tc);
-			m.id = id;
-			tc.missiles.add(m);
+			for (int i = 0; i < tc.missiles.size(); i++) {
+				Missile m = tc.missiles.get(i);
+				if (m.tankId == tankID && id == m.id) {
+					m.live = false;
+				}
+			}
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 }

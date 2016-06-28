@@ -9,9 +9,12 @@ public class Missile {
 
 	public static final int WIDTH = 10;
 	public static final int HEIGHT = 10;
+	
+	public static int ID = 1;
 
 	TankClient tc;
 	int tankId;
+	int id;
 
 	int x, y;
 	Dir dir = Dir.R;
@@ -23,6 +26,7 @@ public class Missile {
 		this.y = y;
 		this.good = good;
 		this.dir = dir;
+		this.id = ID++;
 	}
 
 	public Missile(int tankId, int x, int y, boolean good, Dir dir, TankClient tc) {

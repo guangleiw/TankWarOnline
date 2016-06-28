@@ -44,6 +44,8 @@ public class TankClient extends Frame {
 			{
 				TankDeadMsg msg = new TankDeadMsg(myTank.id);
 				nc.send(msg);
+				MissileDeadMsg md_msg = new MissileDeadMsg(m.tankId,m.id);
+				nc.send(md_msg);
 			}
 			m.draw(g);
 		}
