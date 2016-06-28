@@ -135,16 +135,16 @@ public class Tank {
 		if (y + HEIGHT > TankClient.GAME_HEIGHT)
 			y = TankClient.GAME_HEIGHT - HEIGHT;
 
-		if (!good) {
-			if (step == 0) {
-				step = r.nextInt(12) + 3;
-				Dir[] dirs = Dir.values();
-				dir = dirs[r.nextInt(dirs.length)];
-			}
-			step--;
-			if (r.nextInt(40) > 38)
-				this.fire();
-		}
+//		if (!good) {
+//			if (step == 0) {
+//				step = r.nextInt(12) + 3;
+//				Dir[] dirs = Dir.values();
+//				dir = dirs[r.nextInt(dirs.length)];
+//			}
+//			step--;
+//			if (r.nextInt(40) > 38)
+//				this.fire();
+//		}
 
 	}
 

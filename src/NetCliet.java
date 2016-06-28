@@ -45,7 +45,13 @@ public class NetCliet {
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			dos.writeInt(udp_port);
 			DataInputStream dis = new DataInputStream(s.getInputStream());
-			tc.myTank.id = dis.readInt();
+			int id = dis.readInt();
+			tc.myTank.id = id;
+			if(id%2 == 0){
+				tc.myTank.good = false;
+			}else {
+				tc.myTank.good = true;
+			}
 			System.out.println("connected to server!");
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -111,6 +117,9 @@ public class NetCliet {
 				break;
 			case Msg.TANK_MISSILE_MSG:
 				msg = new MissileNewMsg(tc);
+				break;
+			case Msg.TANK_DEAD_MSG:
+				msg = new TankDeadMsg(tc);
 				break;
 			}
 			msg.parse(dis);
