@@ -13,6 +13,7 @@ import sun.security.krb5.internal.NetClient;
 public class NetCliet {
 
 	private int udp_port;
+	private String serverIP;
 
 	public int getUdp_port() {
 		return udp_port;
@@ -32,6 +33,8 @@ public class NetCliet {
 	}
 
 	public void connect(String ip, int port) {
+		
+		this.serverIP = ip;
 
 		try {
 			ds = new DatagramSocket(this.udp_port);
@@ -74,7 +77,7 @@ public class NetCliet {
 	}
 
 	public void send(Msg msg) {
-		msg.send(ds, "127.0.0.1", TankServer.UDP_PORT);
+		msg.send(ds, serverIP, TankServer.UDP_PORT);
 	}
 
 	private class UDPRecvThread implements Runnable {
